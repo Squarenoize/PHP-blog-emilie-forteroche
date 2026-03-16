@@ -1,6 +1,6 @@
 <?php 
     /** 
-     * Affichage de la partie admin : liste des articles avec un bouton "modifier" pour chacun. 
+     * Affichage de la partie admin EDITION : liste des articles avec un bouton "modifier" pour chacun. 
      * Et un formulaire pour ajouter un article. 
      */
 require_once('adminTabs.php')

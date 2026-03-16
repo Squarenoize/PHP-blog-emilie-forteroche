@@ -1,7 +1,6 @@
 <?php 
     /** 
-     * Affichage de la partie admin : liste des articles avec un bouton "modifier" pour chacun. 
-     * Et un formulaire pour ajouter un article. 
+     * Affichage de la navigation partie admin : EDITION / MONITORING.  
      */
 ?>
 <div class="adminTabs">
