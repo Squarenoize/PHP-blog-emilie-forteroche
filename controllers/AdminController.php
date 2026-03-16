@@ -14,14 +14,27 @@ class AdminController {
         // On vérifie que l'utilisateur est connecté.
         $this->checkIfUserIsConnected();
 
-        // On récupère les articles.
-        $articleManager = new ArticleManager();
-        $articles = $articleManager->getAllArticles();
+        // On récupère le panel demandé (édition ou monitoring).
+        $panel = Utils::request("panel", "edition");
+
+        switch ($panel) {
+            case "monitoring":
+                $articleManager = new ArticleManager();
+                $articles = $articleManager->getAllArticles();
+                $panelView = "adminMonitoring";
+                break;
+            case "edition":
+                $articleManager = new ArticleManager();
+                $articles = $articleManager->getAllArticles();
+                $panelView = "adminEdition";
+                break;
+        }
 
         // On affiche la page d'administration.
         $view = new View("Administration");
-        $view->render("admin", [
-            'articles' => $articles
+        $view->render($panelView, [
+            'articles' => $articles,
+            'panel' => $panel
         ]);
     }
 

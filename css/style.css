@@ -307,6 +307,26 @@ a.info {
  * Partie admin
  */ 
 
+ .adminTabs {
+    display: flex;
+    align-items: center;
+    width: 100%;
+ }
+
+ .adminTab {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding: 10px;
+    color: white;
+    background-color: var(--commentColor);
+ }
+
+ .adminTab.active {
+    background-color: var(--headerColor);
+    font-weight: bold;
+}
+
 .adminArticle {
     margin-bottom: 20px;
     background-color: var(--commentPaleColor);

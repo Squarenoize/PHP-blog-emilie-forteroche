@@ -3,9 +3,10 @@
      * Affichage de la partie admin : liste des articles avec un bouton "modifier" pour chacun. 
      * Et un formulaire pour ajouter un article. 
      */
+require_once('adminTabs.php')
 ?>
 
-<h2>Edition des articles</h2>
+<h2>Monitoring des articles</h2>
 
 <div class="adminArticle">
     <?php foreach ($articles as $article) { ?>
