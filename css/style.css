@@ -327,7 +327,30 @@ a.info {
     font-weight: bold;
 }
 
-.adminArticle {
+.monitoringTable {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.monitoringTable thead {
+    background-color: var(--commentColor);
+    color: white;
+}
+
+.monitoringTable a {
+    display: flex;
+    justify-content: center;
+}
+
+.monitoringTable th,
+.monitoringTable td {
+    min-width: 170px;
+    text-align: center;
+    border: 1px solid var(--backgroundColor);
+    padding: 10px;
+}
+
+.adminArticle, .adminMonitoring {
     margin-bottom: 20px;
     background-color: var(--commentPaleColor);
     color: white;

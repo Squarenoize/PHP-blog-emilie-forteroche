@@ -87,4 +87,36 @@ class Utils {
         return $_REQUEST[$variableName] ?? $defaultValue;
     }
 
+    /**
+     * Cette méthode retourne le tri suivant pour un champ donné.
+     * Si le tri actuel est ascendant, elle retourne descendant, et inversement.
+     * @param string $currentSort : le tri actuel.
+     * @param string $field : le champ à trier.
+     * @return string : le tri suivant.
+     */
+    public static function getNextSort(string $currentSort, string $field) : string
+    {
+        $asc = $field . "_asc";
+        $desc = $field . "_desc";
+
+        return $currentSort === $asc ? $desc : $asc;
+    }
+
+    /**
+     * Cette méthode retourne l'icône de tri pour un champ donné.
+     * @param string $currentSort : le tri actuel.
+     * @param string $field : le champ à trier.
+     * @return string : l'icône de tri.
+     */
+    public static function getSortIcon(string $currentSort, string $field) : string
+    {
+        if ($currentSort === $field . "_asc") {
+            return "↑";
+        }
+        if ($currentSort === $field . "_desc") {
+            return "↓";
+        }
+        return "";
+    }
+
 }

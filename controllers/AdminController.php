@@ -16,26 +16,61 @@ class AdminController {
 
         // On récupère le panel demandé (édition ou monitoring).
         $panel = Utils::request("panel", "edition");
+        
 
         switch ($panel) {
             case "monitoring":
+                $monitoring = true;
                 $articleManager = new ArticleManager();
-                $articles = $articleManager->getAllArticles();
+                $articles = $articleManager->getAllArticles($monitoring);
+                
+                $sort = Utils::request("sort", "date_desc");
+                $allowedSorts = ["date_desc", "date_asc", "views_desc", "views_asc", "comments_desc", "comments_asc", "title_asc", "title_desc"];
+                if (!in_array($sort, $allowedSorts, true)) {
+                    $sort = "date_desc";
+                }
+
+                $sortLinks = [
+                    "title" => Utils::getNextSort($sort, "title"),
+                    "views" => Utils::getNextSort($sort, "views"),
+                    "comments" => Utils::getNextSort($sort, "comments"),
+                    "date" => Utils::getNextSort($sort, "date")
+                ];
+
+                $sortIcons = [
+                    "title" => Utils::getSortIcon($sort, "title"),
+                    "views" => Utils::getSortIcon($sort, "views"),
+                    "comments" => Utils::getSortIcon($sort, "comments"),
+                    "date" => Utils::getSortIcon($sort, "date")
+                ];
+                
+                $articles = $this->sortArticles($articles, $sort);
+                
                 $panelView = "adminMonitoring";
+                $view = new View("Administration");
+                $view->render($panelView, [
+                    'articles' => $articles,
+                    'panel' => $panel,
+                    'sort' => $sort,
+                    'sortLinks' => $sortLinks,
+                    'sortIcons' => $sortIcons
+                ]);
                 break;
             case "edition":
                 $articleManager = new ArticleManager();
                 $articles = $articleManager->getAllArticles();
+                
                 $panelView = "adminEdition";
+                // On affiche la page d'administration.
+                $view = new View("Administration");
+                $view->render($panelView, [
+                    'articles' => $articles,
+                    'panel' => $panel
+                ]);
                 break;
         }
 
-        // On affiche la page d'administration.
-        $view = new View("Administration");
-        $view->render($panelView, [
-            'articles' => $articles,
-            'panel' => $panel
-        ]);
+        
     }
 
     /**
@@ -188,5 +223,52 @@ class AdminController {
        
         // On redirige vers la page d'administration.
         Utils::redirect("admin");
+    }
+
+    private function sortArticles(array $articles, string $sort) : array 
+    {
+        switch ($sort) {
+            case "title_asc":
+                usort($articles, function($a, $b) {
+                    return $a->getTitle() <=> $b->getTitle();
+                });
+                break;
+            case "title_desc":
+                usort($articles, function($a, $b) {
+                    return $b->getTitle() <=> $a->getTitle();
+                });
+                break;
+            case "date_asc":
+                usort($articles, function($a, $b) {
+                    return $a->getDateCreation() <=> $b->getDateCreation();
+                });
+                break;
+            case "date_desc":
+                usort($articles, function($a, $b) {
+                    return $b->getDateCreation() <=> $a->getDateCreation();
+                });
+                break;
+            case "views_asc":
+                usort($articles, function($a, $b) {
+                    return $a->getViews() <=> $b->getViews();
+                });
+                break;
+            case "views_desc":
+                usort($articles, function($a, $b) {
+                    return $b->getViews() <=> $a->getViews();
+                });
+                break;
+            case "comments_asc":
+                usort($articles, function($a, $b) {
+                    return $a->getCommentsCount() <=> $b->getCommentsCount();
+                });
+                break;
+            case "comments_desc":
+                usort($articles, function($a, $b) {
+                    return $b->getCommentsCount() <=> $a->getCommentsCount();
+                });
+                break;
+        }
+        return $articles;
     }
 }

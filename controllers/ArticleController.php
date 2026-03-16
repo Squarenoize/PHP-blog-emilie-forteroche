@@ -31,6 +31,11 @@ class ArticleController
             throw new Exception("L'article demandé n'existe pas.");
         }
 
+        //Vérifier que l'article n'est pas consulté par un admin (en vérifiant la session). Si c'est le cas, on n'incrémente pas le nombre de vues.
+        if (!isset($_SESSION['user'])) {
+            $articleManager->incrementViews($id);
+        }
+
         $commentManager = new CommentManager();
         $comments = $commentManager->getAllCommentsByArticleId($id);
 

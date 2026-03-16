@@ -12,6 +12,7 @@
     private ?DateTime $dateCreation = null;
     private ?DateTime $dateUpdate = null;
     private int $views = 0; 
+    private int $commentsCount = 0; // Ce champ n'est pas dans la base de données, il est calculé à partir du nombre de commentaires d'un article.
 
     /**
      * Setter pour l'id de l'utilisateur. 
@@ -49,7 +50,23 @@
         return $this->title;
     }
 
-    
+    /**
+     * Setter pour le nombre de commentaires.
+     * @param int $commentsCount
+     */
+    public function setCommentsCount(int $commentsCount) : void 
+    {
+        $this->commentsCount = $commentsCount;
+    }
+
+    /**
+     * Getter pour le nombre de commentaires.
+     * @return int
+     */
+    public function getCommentsCount() : int
+    {
+        return $this->commentsCount;
+    }
 
     /**
      * Setter pour le contenu.

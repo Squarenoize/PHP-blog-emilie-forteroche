@@ -9,7 +9,7 @@ class ArticleManager extends AbstractEntityManager
      * Récupère tous les articles.
      * @return array : un tableau d'objets Article.
      */
-    public function getAllArticles() : array
+    public function getAllArticles($monitoring = false) : array
     {
         $sql = "SELECT * FROM article";
         $result = $this->db->query($sql);
@@ -17,6 +17,13 @@ class ArticleManager extends AbstractEntityManager
 
         while ($article = $result->fetch()) {
             $articles[] = new Article($article);
+        }
+        if ($monitoring) {
+            // On ajoute le nombre de commentaires à chaque article.
+            $commentManager = new CommentManager();
+            foreach ($articles as $article) {
+                $article->setCommentsCount($commentManager->getCommentsCountByArticleId($article->getId()));
+            }
         }
         return $articles;
     }
@@ -90,6 +97,17 @@ class ArticleManager extends AbstractEntityManager
     public function deleteArticle(int $id) : void
     {
         $sql = "DELETE FROM article WHERE id = :id";
+        $this->db->query($sql, ['id' => $id]);
+    }
+
+    /**
+     * Incrémente le nombre de vues d'un article.
+     * @param int $id : l'id de l'article.
+     * @return void
+     */
+    public function incrementViews(int $id) : void 
+    {
+        $sql = "UPDATE article SET views = views + 1 WHERE id = :id";
         $this->db->query($sql, ['id' => $id]);
     }
 }

@@ -7,15 +7,37 @@ require_once('adminTabs.php')
 
 <h2>Monitoring des articles</h2>
 
-<div class="adminArticle">
-    <?php foreach ($articles as $article) { ?>
-        <div class="articleLine">
-            <div class="title"><?= $article->getTitle() ?></div>
-            <div class="content"><?= $article->getContent(200) ?></div>
-            <div><a class="submit" href="index.php?action=showUpdateArticleForm&id=<?= $article->getId() ?>">Modifier</a></div>
-            <div><a class="submit" href="index.php?action=deleteArticle&id=<?= $article->getId() ?>" <?= Utils::askConfirmation("Êtes-vous sûr de vouloir supprimer cet article ?") ?> >Supprimer</a></div>
-        </div>
-    <?php } ?>
+<div class="adminMonitoring">
+    <table class="monitoringTable">
+        <thead>
+            <tr>
+                <th><a href="index.php?action=admin&panel=monitoring&sort=<?= $sortLinks['title'] ?>">
+                        Titre <?= $sortIcons['title'] ?>
+                    </a>
+                </th>
+                <th><a href="index.php?action=admin&panel=monitoring&sort=<?= $sortLinks['views'] ?>">
+                        Vues <?= $sortIcons['views'] ?>
+                    </a>
+                </th>
+                <th><a href="index.php?action=admin&panel=monitoring&sort=<?= $sortLinks['comments'] ?>">
+                        Commentaires <?= $sortIcons['comments'] ?>
+                    </a>
+                </th>
+                <th><a href="index.php?action=admin&panel=monitoring&sort=<?= $sortLinks['date'] ?>">
+                        Date de création <?= $sortIcons['date'] ?>
+                    </a>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($articles as $article) { ?>
+                <tr>
+                    <td><?= $article->getTitle() ?></td>
+                    <td><?= $article->getViews() ?></td>
+                    <td><?= $article->getCommentsCount() ?></td>
+                    <td><?= $article->getDateCreation()->format('d/m/Y') ?></td>
+                </tr>
+            <?php } ?>
+        </tbody>
+    </table>
 </div>
-
-<a class="submit" href="index.php?action=showUpdateArticleForm">Ajouter un article</a>
