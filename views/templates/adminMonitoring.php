@@ -30,14 +30,16 @@ require_once('adminTabs.php')
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($articles as $article) { ?>
-                <tr>
+            <?php 
+            $i = 0;
+            foreach ($articles as $article) { ?>
+                <tr class="<?= $i % 2 === 0 ? 'pairLine' : 'impairLine' ?>">
                     <td><?= $article->getTitle() ?></td>
                     <td><?= $article->getViews() ?></td>
                     <td><?= $article->getCommentsCount() ?></td>
                     <td><?= $article->getDateCreation()->format('d/m/Y') ?></td>
                 </tr>
-            <?php } ?>
+            <?php $i++; } ?>
         </tbody>
     </table>
 </div>

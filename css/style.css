@@ -350,6 +350,14 @@ a.info {
     padding: 10px;
 }
 
+.monitoringTable .pairLine {
+    background-color: var(--commentPaleColor);
+}
+
+.monitoringTable .impairLine {
+    background-color: #adb45a;
+}
+
 .adminArticle, .adminMonitoring {
     margin-bottom: 20px;
     background-color: var(--commentPaleColor);
