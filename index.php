@@ -32,7 +32,6 @@ try {
             $commentController->addComment();
             break;
 
-
         // Section admin & connexion. 
         case 'admin': 
             $adminController = new AdminController();
@@ -72,6 +71,11 @@ try {
         case 'deleteArticle':
             $adminController = new AdminController();
             $adminController->deleteArticle();
+            break;
+
+        case 'deleteComment':
+            $adminController = new AdminController();
+            $adminController->deleteComment();
             break;
 
         default:

@@ -265,6 +265,21 @@ a.info {
     margin-bottom: 20px;
 }
 
+.deleteComment {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--dateColor);
+    width: 20px;
+    height: 20px;
+}
+
+.deleteComment:hover {
+    font-size: 20px;
+    font-weight: bold;
+    color: var(--titleColor);
+}
+
 .comments .smiley {
     display: flex;
     align-items: flex-start;

@@ -17,7 +17,6 @@ class AdminController {
         // On récupère le panel demandé (édition ou monitoring).
         $panel = Utils::request("panel", "edition");
         
-
         switch ($panel) {
             case "monitoring":
                 $monitoring = true;
@@ -25,7 +24,16 @@ class AdminController {
                 $articles = $articleManager->getAllArticles($monitoring);
                 
                 $sort = Utils::request("sort", "date_desc");
-                $allowedSorts = ["date_desc", "date_asc", "views_desc", "views_asc", "comments_desc", "comments_asc", "title_asc", "title_desc"];
+                $allowedSorts = [
+                    "date_desc",
+                    "date_asc",
+                    "views_desc",
+                    "views_asc",
+                    "comments_desc",
+                    "comments_asc",
+                    "title_asc",
+                    "title_desc"
+                ];
                 if (!in_array($sort, $allowedSorts, true)) {
                     $sort = "date_desc";
                 }
@@ -68,9 +76,36 @@ class AdminController {
                     'panel' => $panel
                 ]);
                 break;
+        }  
+    }
+
+    /**
+     * Suppression d'un commentaire. Accessible uniquement aux admins (vérification dans la méthode).
+     * @return void
+     */
+    public function deleteComment() : void 
+    {
+        // Vérification que l'utilisateur est connecté et est un admin.
+        $this->checkIfUserIsConnected();
+
+        // Récupération de l'id du commentaire à supprimer.
+        $id = Utils::request("id", -1);
+
+        // Récupération du commentaire à supprimer.
+        $commentManager = new CommentManager();
+        $comment = $commentManager->getCommentById($id);
+        if (!$comment) {
+            throw new Exception("Le commentaire demandé n'existe pas.");
         }
 
-        
+        // Suppression du commentaire.
+        $result = $commentManager->deleteComment($comment);
+        if (!$result) {
+            throw new Exception("Une erreur est survenue lors de la suppression du commentaire.");
+        }
+
+        // Redirection vers la page de l'article associé au commentaire supprimé.
+        Utils::redirect("showArticle", ['id' => $comment->getIdArticle()]);
     }
 
     /**
@@ -230,12 +265,12 @@ class AdminController {
         switch ($sort) {
             case "title_asc":
                 usort($articles, function($a, $b) {
-                    return $a->getTitle() <=> $b->getTitle();
+                    return $b->getTitle() <=> $a->getTitle();
                 });
                 break;
             case "title_desc":
                 usort($articles, function($a, $b) {
-                    return $b->getTitle() <=> $a->getTitle();
+                    return $a->getTitle() <=> $b->getTitle();
                 });
                 break;
             case "date_asc":
