@@ -27,6 +27,29 @@ class ArticleManager extends AbstractEntityManager
         }
         return $articles;
     }
+
+    /**
+     * Récupère tous les articles.
+     * @return array : un tableau d'objets Article.
+     */
+    public function getAllArticlesWithViews() : array
+    {
+        $sql = "SELECT * FROM article";
+        $result = $this->db->query($sql);
+        $articles = [];
+
+        while ($article = $result->fetch()) {
+            $articles[] = new Article($article);
+        }
+        
+        // On ajoute le nombre de commentaires à chaque article.
+        $commentManager = new CommentManager();
+        foreach ($articles as $article) {
+            $article->setCommentsCount($commentManager->getCommentsCountByArticleId($article->getId()));
+        }
+        
+        return $articles;
+    }
     
     /**
      * Récupère un article par son id.

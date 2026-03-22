@@ -16,65 +16,15 @@ class AdminController {
 
         // On récupère le panel demandé (édition ou monitoring).
         $panel = Utils::request("panel", "edition");
-        
+
         switch ($panel) {
+            // Tab de monitoring
             case "monitoring":
-                $monitoring = true;
-                $articleManager = new ArticleManager();
-                $articles = $articleManager->getAllArticles($monitoring);
-                
-                $sort = Utils::request("sort", "date_desc");
-                $allowedSorts = [
-                    "date_desc",
-                    "date_asc",
-                    "views_desc",
-                    "views_asc",
-                    "comments_desc",
-                    "comments_asc",
-                    "title_asc",
-                    "title_desc"
-                ];
-                if (!in_array($sort, $allowedSorts, true)) {
-                    $sort = "date_desc";
-                }
-
-                $sortLinks = [
-                    "title" => Utils::getNextSort($sort, "title"),
-                    "views" => Utils::getNextSort($sort, "views"),
-                    "comments" => Utils::getNextSort($sort, "comments"),
-                    "date" => Utils::getNextSort($sort, "date")
-                ];
-
-                $sortIcons = [
-                    "title" => Utils::getSortIcon($sort, "title"),
-                    "views" => Utils::getSortIcon($sort, "views"),
-                    "comments" => Utils::getSortIcon($sort, "comments"),
-                    "date" => Utils::getSortIcon($sort, "date")
-                ];
-                
-                $articles = $this->sortArticles($articles, $sort);
-                
-                $panelView = "adminMonitoring";
-                $view = new View("Administration");
-                $view->render($panelView, [
-                    'articles' => $articles,
-                    'panel' => $panel,
-                    'sort' => $sort,
-                    'sortLinks' => $sortLinks,
-                    'sortIcons' => $sortIcons
-                ]);
+                $this->monitoring($panel);
                 break;
+            // Tab d'édition
             case "edition":
-                $articleManager = new ArticleManager();
-                $articles = $articleManager->getAllArticles();
-                
-                $panelView = "adminEdition";
-                // On affiche la page d'administration.
-                $view = new View("Administration");
-                $view->render($panelView, [
-                    'articles' => $articles,
-                    'panel' => $panel
-                ]);
+                $this->edition($panel);
                 break;
         }  
     }
@@ -241,7 +191,6 @@ class AdminController {
         Utils::redirect("admin");
     }
 
-
     /**
      * Suppression d'un article.
      * @return void
@@ -306,4 +255,64 @@ class AdminController {
         }
         return $articles;
     }
+
+    private function monitoring($panel) {
+        $articleManager = new ArticleManager();
+        $articles = $articleManager->getAllArticlesWithViews();
+        
+        $sort = Utils::request("sort", "date_desc");
+        $allowedSorts = [
+            "date_desc",
+            "date_asc",
+            "views_desc",
+            "views_asc",
+            "comments_desc",
+            "comments_asc",
+            "title_asc",
+            "title_desc"
+        ];
+        if (!in_array($sort, $allowedSorts, true)) {
+            $sort = "date_desc";
+        }
+
+        $sortLinks = [
+            "title" => Utils::getNextSort($sort, "title"),
+            "views" => Utils::getNextSort($sort, "views"),
+            "comments" => Utils::getNextSort($sort, "comments"),
+            "date" => Utils::getNextSort($sort, "date")
+        ];
+
+        $sortIcons = [
+            "title" => Utils::getSortIcon($sort, "title"),
+            "views" => Utils::getSortIcon($sort, "views"),
+            "comments" => Utils::getSortIcon($sort, "comments"),
+            "date" => Utils::getSortIcon($sort, "date")
+        ];
+        
+        $articles = $this->sortArticles($articles, $sort);
+        
+        $panelView = "adminMonitoring";
+        $view = new View("Administration");
+        $view->render($panelView, [
+            'articles' => $articles,
+            'panel' => $panel,
+            'sort' => $sort,
+            'sortLinks' => $sortLinks,
+            'sortIcons' => $sortIcons
+        ]);
+    }
+
+    private function edition($panel) {
+        $articleManager = new ArticleManager();
+        $articles = $articleManager->getAllArticles();
+        
+        $panelView = "adminEdition";
+        // On affiche la page d'administration.
+        $view = new View("Administration");
+        $view->render($panelView, [
+            'articles' => $articles,
+            'panel' => $panel
+        ]);
+    }
+
 }
