@@ -21,6 +21,8 @@
     --quoteColor: #c5cbe4;
     --commentPaleColor: #99a140;
     --commentColor: #255E33;
+    --tableLineColor: #99a140;
+    --tablePaleLineColor: #adb45a;
 }
 
 /**
@@ -366,11 +368,11 @@ a.info {
 }
 
 .monitoringTable .pairLine {
-    background-color: var(--commentPaleColor);
+    background-color: var(--tableLineColor);
 }
 
 .monitoringTable .impairLine {
-    background-color: #adb45a;
+    background-color: var(--tablePaleLineColor);
 }
 
 .adminArticle, .adminMonitoring {
