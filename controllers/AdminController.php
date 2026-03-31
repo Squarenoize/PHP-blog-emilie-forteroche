@@ -214,7 +214,7 @@ class AdminController {
         switch ($sort) {
             case "title_asc":
                 usort($articles, function($a, $b) {
-                    return $b->getTitle() <=> $a->getTitle();
+                    return $a->getTitle() <=> $b->getTitle();
                 });
                 break;
             case "title_desc":
@@ -256,6 +256,10 @@ class AdminController {
         return $articles;
     }
 
+    /**
+     * Affichage du panel de monitoring des articles. Accessible uniquement aux admins (vérification dans la méthode).
+     * @return void
+     */
     private function monitoring($panel) {
         $articleManager = new ArticleManager();
         $articles = $articleManager->getAllArticlesWithViews();
@@ -292,6 +296,7 @@ class AdminController {
         $articles = $this->sortArticles($articles, $sort);
         
         $panelView = "adminMonitoring";
+        // On affiche la page de administration/monitoring.
         $view = new View("Administration");
         $view->render($panelView, [
             'articles' => $articles,
@@ -302,12 +307,16 @@ class AdminController {
         ]);
     }
 
+    /**
+     * Affichage du panel d'édition des articles. Accessible uniquement aux admins (vérification dans la méthode).
+     * @return void
+     */
     private function edition($panel) {
         $articleManager = new ArticleManager();
         $articles = $articleManager->getAllArticles();
         
         $panelView = "adminEdition";
-        // On affiche la page d'administration.
+        // On affiche la page d'administration/édition.
         $view = new View("Administration");
         $view->render($panelView, [
             'articles' => $articles,
