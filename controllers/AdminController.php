@@ -219,7 +219,7 @@ class AdminController {
                 break;
             case "title_desc":
                 usort($articles, function($a, $b) {
-                    return $a->getTitle() <=> $b->getTitle();
+                    return $b->getTitle() <=> $a->getTitle();
                 });
                 break;
             case "date_asc":
